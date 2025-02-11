@@ -1,5 +1,5 @@
-## o3 "o[1]ne-o[2]n-o[3]ne"
-### Used for recording daily activities for reporting to your manager in one-on-ones.
+# o3 "o[1]ne-o[2]n-o[3]ne"
+Recording your daily activities for quick recall in one-on-ones with your manager.
 
 ### Config
 Add .env file in project directory with the following variables:
@@ -41,7 +41,7 @@ cargo build --release
 Then symlink the binary to a directory in your PATH.
 
 ```zsh
-sudo ln -s /path/to/o3/target/release /usr/local/bin
+sudo ln -s /path/to/o3/target/release/o3 /usr/local/bin
 ```
 
 Now, you should be able to run the `o3` command anywhere on your system.
