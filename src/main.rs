@@ -5,6 +5,29 @@ use std::env;
 use postgres::{Client, NoTls};
 
 fn main() {
+    // Declare variable for ARGV
+    let args: Vec<String> = env::args().collect();
+
+    // Check if args exist. If not, run summary procedure.
+    if args.len() == 1 {
+        summary();
+    // If arguments were supplied, handle the arguments.
+    } else {
+        match args.last() {
+            Some(_arg) => handle_args(args[1..].to_vec()),
+            None => summary()
+        }
+    }
+}
+
+fn handle_args(args: Vec<String>) {
+    // Match the first argument and perform different functions.
+    if args[0] == "ls" {
+        list_summaries();
+    }
+}
+
+fn summary() {
     // Check dotenv and gather all PostgreSQL ENV variables.
     dotenv().ok();
 
@@ -27,12 +50,31 @@ fn main() {
         .read_line(&mut summary)
         .expect("Failed to read input summary");
     
-    println!("\x0a\x1b[36mSummary:\x1b[0m\x09\x09\x09{}", &summary);
 
-    //////////////////////////////////////////////////////////////////////////////
-    //
-    // Database functionality
-    //
+    let _num_rows_inserted = pg_client().execute(
+        "INSERT INTO summaries (summary) VALUES($1)",
+        &[&summary.trim_end()],
+    );
+
+    println!("\x0a\x1b[36mSummary:\x1b[0m\x09\x09\x09{}", &summary);
+    // println!("{} row(s) inserted.", num_rows_inserted);
+}
+
+fn list_summaries() {
+    if let Ok(rows) = pg_client().query("SELECT * FROM summaries", &[]) {
+        for row in rows {
+            let text: &str = row.get(2);
+            println!("{}", text);
+        }
+    }
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Database functionality
+//
+fn pg_client() -> Client {
     let pg_host = match env::var("POSTGRES_HOST") {
         Ok(val) => val,
         Err(e) => panic!("could not find {}: {}", "POSTGRES_HOST", e),
@@ -63,15 +105,10 @@ fn main() {
         pg_password
     );
 
-    let mut pg_client = match Client::connect(&params, NoTls) {
+    let client = match Client::connect(&params, NoTls) {
         Ok(client) => client,
         Err(e) => panic!("Could not connect to Postgres. {}", e)
     };
     
-    let _num_rows_inserted = pg_client.execute(
-        "INSERT INTO summaries (summary) VALUES($1)",
-        &[&summary.trim_end()],
-    );
-
-    // println!("{} row(s) inserted.", num_rows_inserted);
+    return client;
 }
