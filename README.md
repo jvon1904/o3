@@ -1,6 +1,9 @@
 # o3 "o[1]ne-o[2]n-o[3]ne"
 Recording your daily activities for quick recall in one-on-ones with your manager.
 
+### Options
+- `ls` - List all summaries.
+
 ### Database
 Create the database by running the "o3_database.sql" found in the root directory.  Make sure you change the <POSTGRES_USER> to the desired application user.
 
