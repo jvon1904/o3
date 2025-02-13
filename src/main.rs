@@ -2,6 +2,9 @@ use std::io;
 use std::io::Write;
 use dotenv::dotenv;
 use std::env;
+use std::time::SystemTime;
+use chrono::DateTime;
+use chrono::offset::Local;
 use postgres::{Client, NoTls};
 
 fn main() {
@@ -61,10 +64,12 @@ fn summary() {
 }
 
 fn list_summaries() {
-    if let Ok(rows) = pg_client().query("SELECT * FROM summaries", &[]) {
+    if let Ok(rows) = pg_client().query("SELECT * FROM summaries ORDER BY created_at DESC", &[]) {
         for row in rows {
             let text: &str = row.get(2);
-            println!("{}", text);
+            let ts: SystemTime = row.get(1);
+            let date: DateTime<Local> = ts.into();
+            println!("{}\t{}", date.format("%a %l:%m%P"), text);
         }
     }
 }
