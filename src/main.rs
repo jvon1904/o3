@@ -69,7 +69,7 @@ fn list_summaries() {
             let text: &str = row.get(2);
             let ts: SystemTime = row.get(1);
             let date: DateTime<Local> = ts.into();
-            println!("{}\t{}", date.format("%a %l:%m%P"), text);
+            println!("{}\t{}", date.format("%a %l:%M%P"), text);
         }
     }
 }
