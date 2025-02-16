@@ -15,7 +15,7 @@ CREATE TABLE public.summaries (
     summary text
 );
 
-ALTER TABLE public.summaries OWNER TO <POSTGRES_USER>;
+ALTER TABLE public.summaries OWNER TO __POSTGRES_USER__;
 
 CREATE SEQUENCE public.summaries_id_seq
     AS integer
@@ -26,7 +26,7 @@ CREATE SEQUENCE public.summaries_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.summaries_id_seq OWNER TO <POSTGRES_USER>;
+ALTER SEQUENCE public.summaries_id_seq OWNER TO __POSTGRES_USER__;
 
 ALTER SEQUENCE public.summaries_id_seq OWNED BY public.summaries.id;
 
