@@ -1,5 +1,5 @@
 # o3 "o[1]ne-o[2]n-o[3]ne"
-Recording your daily activities for quick recall in one-on-ones with your manager.
+Record your daily activities for quick recall in one-on-ones with your manager.
 
 ### Running Locally
 To create the Postgres database locally, set any ENV variables (described below) and run `make` or `make setup`.
