@@ -1,11 +1,10 @@
+mod postgres;
 use std::io;
-use std::io::Write;
-use dotenv::dotenv;
 use std::env;
+use std::io::Write;
 use std::time::SystemTime;
 use chrono::DateTime;
 use chrono::offset::Local;
-use postgres::{Client, NoTls};
 
 fn main() {
     // Declare variable for ARGV
@@ -31,9 +30,6 @@ fn handle_args(args: Vec<String>) {
 }
 
 fn summary() {
-    // Check dotenv and gather all PostgreSQL ENV variables.
-    dotenv().ok();
-
     // Print greeting
     //
     // 0x1b (27) is ASCII escape (0b0011011)
@@ -54,7 +50,7 @@ fn summary() {
         .expect("Failed to read input summary");
     
 
-    let _num_rows_inserted = pg_client().execute(
+    let _num_rows_inserted = postgres::client().execute(
         "INSERT INTO summaries (summary) VALUES($1)",
         &[&summary.trim_end()],
     );
@@ -64,7 +60,7 @@ fn summary() {
 }
 
 fn list_summaries() {
-    if let Ok(rows) = pg_client().query("SELECT * FROM summaries ORDER BY created_at DESC", &[]) {
+    if let Ok(rows) = postgres::client().query("SELECT * FROM summaries ORDER BY created_at DESC", &[]) {
         for row in rows {
             let text: &str = row.get(2);
             let ts: SystemTime = row.get(1);
@@ -72,48 +68,4 @@ fn list_summaries() {
             println!("{}\t{}", date.format("%a %l:%M%P"), text);
         }
     }
-}
-
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// Database functionality
-//
-fn pg_client() -> Client {
-    let pg_host = match env::var("POSTGRES_HOST") {
-        Ok(val) => val,
-        Err(e) => panic!("could not find {}: {}", "POSTGRES_HOST", e),
-    };
-    let pg_port = match env::var("POSTGRES_PORT") {
-        Ok(val) => val,
-        Err(e) => panic!("could not find {}: {}", "POSTGRES_PORT", e),
-    };
-    let pg_database = match env::var("POSTGRES_DATABASE") {
-        Ok(val) => val,
-        Err(e) => panic!("could not find {}: {}", "POSTGRES_DATABASE", e),
-    };
-    let pg_user = match env::var("POSTGRES_USER") {
-        Ok(val) => val,
-        Err(e) => panic!("could not find {}: {}", "POSTGRES_USER", e),
-    };
-    let pg_password = match env::var("POSTGRES_PASSWORD") {
-        Ok(val) => val,
-        Err(e) => panic!("could not find {}: {}", "POSTGRES_PASSWORD", e),
-    };
-
-    let params = format!(
-        "host={} port={} dbname={} user={} password={}", 
-        pg_host,
-        pg_port,
-        pg_database,
-        pg_user,
-        pg_password
-    );
-
-    let client = match Client::connect(&params, NoTls) {
-        Ok(client) => client,
-        Err(e) => panic!("Could not connect to Postgres. {}", e)
-    };
-    
-    return client;
 }
