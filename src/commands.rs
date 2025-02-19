@@ -42,13 +42,19 @@ pub fn list(args: Vec<String>) {
             "SELECT * FROM summaries \
                             ORDER BY created_at DESC",
         );
-    } else if args[0].parse::<i16>().unwrap() > 0 {
-        query = format!(
-            "SELECT * FROM summaries \
-                       WHERE created_at >= current_date - INTERVAL '{} days' \
-                       ORDER BY created_at DESC",
-            args[0]
-        );
+    } else {
+        // Must be a number between 0 and 65535, else print an error.
+        match args[0].parse::<u16>() {
+            Ok(_) => {
+                query = format!(
+                    "SELECT * FROM summaries \
+                                        WHERE created_at >= current_date - INTERVAL '{} days' \
+                                        ORDER BY created_at DESC",
+                    args[0]
+                )
+            }
+            Err(_) => println!("{} is not a valid number of days.", args[0]),
+        }
     }
 
     if let Ok(rows) = database::client().query(&query, &[]) {

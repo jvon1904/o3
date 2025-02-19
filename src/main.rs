@@ -3,6 +3,9 @@ mod database;
 use std::env;
 
 fn main() {
+    let i: &str = "16";
+    i.parse::<i16>().unwrap();
+
     let args: Vec<String> = env::args().collect();
 
     if args.len() > 1 {
