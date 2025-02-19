@@ -7,8 +7,10 @@ To create the Postgres database locally, set any ENV variables (described below)
 To create the binary "o3", run `make bin`.
 
 ### Options
+- Default is `add` if no arguments are specified.
+- `a` | `add` - Add a summary to the database.
 - `ls` | `list` - List all summaries.
-  Optionally supply a number to list summaries between now and that many days ago.
+  - Optionally supply a number (0-65535) to list summaries between now and that many days ago.
 
 ### Database
 Create the database by running the "o3_database.sql" found in the root directory.  Make sure you change the <O3_POSTGRES_USER> to the desired application user.
