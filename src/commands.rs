@@ -5,7 +5,9 @@ use std::io;
 use std::io::Write;
 use std::time::SystemTime;
 
-pub fn summary() {
+// Default command if no argument supplied.
+// Add input string summary to database.
+pub fn add() {
     // Print greeting
     //
     // 0x1b (27) is ASCII escape (0b0011011)
@@ -34,6 +36,7 @@ pub fn summary() {
     // println!("{} row(s) inserted.", num_rows_inserted);
 }
 
+// Print summaries from database.
 pub fn list(args: Vec<String>) {
     let mut query = String::from("");
 
