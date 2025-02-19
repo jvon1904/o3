@@ -3,24 +3,18 @@ mod database;
 use std::env;
 
 fn main() {
-    // Declare variable for ARGV
     let args: Vec<String> = env::args().collect();
 
-    // Check if args exist. If not, run summary procedure.
-    if args.len() == 1 {
-        commands::summary();
-    // If arguments were supplied, handle the arguments.
+    if args.len() > 1 {
+        handle_args(args[1..].to_vec())
     } else {
-        match args.last() {
-            Some(_arg) => handle_args(args[1..].to_vec()),
-            None => commands::summary(),
-        }
+        commands::summary();
     }
 }
 
 fn handle_args(args: Vec<String>) {
-    // Match the first argument and perform different functions.
-    if args[0] == "ls" {
-        commands::list();
+    match args[0].as_str() {
+        "l" | "ls" | "list" | "--list" => commands::list(args[1..].to_vec()),
+        _ => println!("{} is not a valid command", args[0]),
     }
 }

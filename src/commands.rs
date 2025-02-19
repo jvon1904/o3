@@ -1,6 +1,6 @@
+use crate::database;
 use chrono::offset::Local;
 use chrono::DateTime;
-use crate::database;
 use std::io;
 use std::io::Write;
 use std::time::SystemTime;
@@ -34,10 +34,24 @@ pub fn summary() {
     // println!("{} row(s) inserted.", num_rows_inserted);
 }
 
-pub fn list() {
-    if let Ok(rows) =
-        database::client().query("SELECT * FROM summaries ORDER BY created_at DESC", &[])
-    {
+pub fn list(args: Vec<String>) {
+    let mut query = String::from("");
+
+    if args.len() == 0 {
+        query = String::from(
+            "SELECT * FROM summaries \
+                            ORDER BY created_at DESC",
+        );
+    } else if args[0].parse::<i16>().unwrap() > 0 {
+        query = format!(
+            "SELECT * FROM summaries \
+                       WHERE created_at >= current_date - INTERVAL '{} days' \
+                       ORDER BY created_at DESC",
+            args[0]
+        );
+    }
+
+    if let Ok(rows) = database::client().query(&query, &[]) {
         for row in rows {
             let text: &str = row.get(2);
             let ts: SystemTime = row.get(1);
