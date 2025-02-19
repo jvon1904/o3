@@ -10,27 +10,27 @@ To create the binary "o3", run `make bin`.
 - `ls` - List all summaries.
 
 ### Database
-Create the database by running the "o3_database.sql" found in the root directory.  Make sure you change the <POSTGRES_USER> to the desired application user.
+Create the database by running the "o3_database.sql" found in the root directory.  Make sure you change the <O3_POSTGRES_USER> to the desired application user.
 
 ### Config
 Add .env file in project directory with the following variables:
 
 ```env
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_DATABASE=o3_database
-POSTGRES_USER=o3_application_user
-POSTGRES_PASSWORD=<PASSWORD>
+O3_POSTGRES_HOST=localhost
+O3_POSTGRES_PORT=5432
+O3_POSTGRES_DATABASE=o3_database
+O3_POSTGRES_USER=o3_application_user
+O3_POSTGRES_PASSWORD=<PASSWORD>
 ```
 
 Also, you can add an .o3_config file to home directory, and export all in POSTGRES variables there.  
 
 ```zsh
-export POSTGRES_HOST=localhost
-export POSTGRES_PORT=5432
-export POSTGRES_DATABASE=o3_database
-export POSTGRES_USER=o3_application_user
-export POSTGRES_PASSWORD=<PASSWORD>
+export O3_POSTGRES_HOST=localhost
+export O3_POSTGRES_PORT=5432
+export O3_POSTGRES_DATABASE=o3_database
+export O3_POSTGRES_USER=o3_application_user
+export O3_POSTGRES_PASSWORD=<PASSWORD>
 ```
 
 Then source the .o3_config file in your .zshrc.
