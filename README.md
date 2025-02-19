@@ -1,19 +1,22 @@
 # o3 "o[1]ne-o[2]n-o[3]ne"
 Record your daily activities for quick recall in one-on-ones with your manager.
 
-### Running Locally
+### Setup
 To create the Postgres database locally, set any ENV variables (described below) and run `make` or `make setup`.
 
-To create the binary "o3", run `make bin`.
+This will create the database by running the "o3_database.sql" found in the root directory. It will substitute the POSTGRES_USER of the env variable O3_POSTGRES_USER if set.
 
-### Options
-- Default is `add` if no arguments are specified.
-- `a` | `add` - Add a summary to the database.
-- `ls` | `list` - List all summaries.
+To create the binary "o3", run `make bin`.  This will install the binary in `/usr/local/bin`.  It will require su permissions, so you will be prompted to enter your password.
+
+
+### Commands
+After creating the `o3` binary, verfify it's in your path by typing `which o3`. You should see `/usr/local/bin/o3`.
+
+- `o3` - Default is `add` if no arguments are specified.
+- `o3 a | add` - Add a summary to the database.
+- `o3 ls | list [0-65535]` - List all summaries.
   - Optionally supply a number (0-65535) to list summaries between now and that many days ago.
 
-### Database
-Create the database by running the "o3_database.sql" found in the root directory.  Make sure you change the <O3_POSTGRES_USER> to the desired application user.
 
 ### Config
 Add .env file in project directory with the following variables:
@@ -43,7 +46,7 @@ source ~/.o3_config
 ```
 
 
-### Executable
+### Manually create the executable
 Add symlink to PATH.
 
 First, create a release binary.
